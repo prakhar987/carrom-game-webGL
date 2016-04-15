@@ -1,0 +1,599 @@
+<html>
+   <head>
+      <title>My first Three.js app</title>
+      <style>
+         body { margin: 0; }
+         canvas { width: 100%; height: 100% ;  }
+         p { color:red; top:0px; left:0px;width:110;height:20;position: absolute; }
+      </style>
+   </head>
+   <body>
+   <p id="header" style="background-color:lightgrey;"></p> 
+
+
+
+
+      <script src="js/three.min.js"></script>
+      <script src='THREEx.KeyboardState.js'></script>
+
+      <script>
+         var scene = new THREE.Scene();
+         var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+         var renderer = new THREE.WebGLRenderer();
+         renderer.setSize( window.innerWidth, window.innerHeight );
+         document.body.appendChild( renderer.domElement );
+
+         var audio = new Audio('gun.mp3');
+
+         // RECTANGLE         
+         
+         // potted coin holder
+         var rectLength = 0.5, rectWidth = 4.5;
+         var rectShape = new THREE.Shape();
+         rectShape.moveTo( 0.0,0.0 );
+         rectShape.lineTo( 0.0, rectWidth );
+         rectShape.lineTo( rectLength, rectWidth );
+         rectShape.lineTo( rectLength, 0.0 );
+         rectShape.lineTo( 0.0, 0.0 );
+         var color = new THREE.Color("rgb(100, 149, 237)");
+         var rectGeom = new THREE.ShapeGeometry( rectShape );
+         var inner_rec = new THREE.Mesh( rectGeom, new THREE.MeshBasicMaterial( { color } ) ) ;
+         scene.add( inner_rec );
+         inner_rec.translateX( -3.6 );
+         inner_rec.translateY( -2.0 );
+
+         // power indicator
+         var rectLength = 0.5, rectWidth = 1;
+         var rectShape = new THREE.Shape();
+         rectShape.moveTo( 0.0,0.0 );
+         rectShape.lineTo( 0.0, rectWidth );
+         rectShape.lineTo( rectLength, rectWidth );
+         rectShape.lineTo( rectLength, 0.0 );
+         rectShape.lineTo( 0.0, 0.0 );
+         var color = new THREE.Color("rgb(100, 100, 100)");
+         var rectGeom = new THREE.ShapeGeometry( rectShape );
+         var powerbar = new THREE.Mesh( rectGeom, new THREE.MeshBasicMaterial( { color } ) ) ;
+         scene.add( powerbar );
+         powerbar.translateX( -3.6 );
+         powerbar.translateY( -2.0 );
+
+         // outter rectangle
+         var rectLength = 5.0, rectWidth = 5.0;
+         var rectShape = new THREE.Shape();
+         rectShape.moveTo( 0.0,0.0 );
+         rectShape.lineTo( 0.0, rectWidth );
+         rectShape.lineTo( rectLength, rectWidth );
+         rectShape.lineTo( rectLength, 0.0 );
+         rectShape.lineTo( 0.0, 0.0 );
+         var color = new THREE.Color("rgb(139, 69, 19)");
+         var rectGeom = new THREE.ShapeGeometry( rectShape );
+         var outter_rec = new THREE.Mesh( rectGeom, new THREE.MeshBasicMaterial( { color } ) ) ;
+         scene.add( outter_rec );
+         outter_rec.translateX( -2.70 );
+         outter_rec.translateY( -2.25 );
+
+         // inner rectangle
+         var rectLength = 4.5, rectWidth = 4.5;
+         var rectShape = new THREE.Shape();
+         rectShape.moveTo( 0.0,0.0 );
+         rectShape.lineTo( 0.0, rectWidth );
+         rectShape.lineTo( rectLength, rectWidth );
+         rectShape.lineTo( rectLength, 0.0 );
+         rectShape.lineTo( 0.0, 0.0 );
+         var color = new THREE.Color("rgb(205, 175, 149)");
+         var rectGeom = new THREE.ShapeGeometry( rectShape );
+         var inner_rec = new THREE.Mesh( rectGeom, new THREE.MeshBasicMaterial( { color } ) ) ;
+         scene.add( inner_rec );
+         inner_rec.translateX( -2.45 );
+         inner_rec.translateY( -2.0 );
+
+         // Lines
+         var color = new THREE.Color("rgb(178,34,34)");
+         var rectLength = 3.5, rectWidth = 3.5;
+         var rectShape = new THREE.Shape();
+         rectShape.moveTo( 0.0,0.0 );
+         rectShape.lineTo( 0.0, rectWidth );
+         rectShape.lineTo( rectLength, rectWidth );
+         rectShape.lineTo( rectLength, 0.0 );
+         rectShape.lineTo( 0.0, 0.0 );
+         var rectGeom = new THREE.ShapeGeometry( rectShape );
+         var line = new THREE.Line( rectGeom, new THREE.LineBasicMaterial( { color } ) ) ;
+         scene.add( line );
+         line.translateX( -2.0 );
+         line.translateY( -1.5 );
+
+            var color = new THREE.Color("rgb(178,34,34)");
+            var material = new THREE.LineBasicMaterial({color});
+            var geometry = new THREE.Geometry();
+            geometry.vertices.push(
+            new THREE.Vector3(  -2.0,-1.5,0 ),
+            new THREE.Vector3(  -2.0+3.5,-1.5, 0),
+            new THREE.Vector3( -2.0,-1.5,0)
+            );
+            shooter = new THREE.Line( geometry, material );
+            scene.add( shooter );
+
+
+
+         // Holes
+         var color = new THREE.Color("rgb(210, 105, 30)");
+         var material = new THREE.MeshBasicMaterial({color});
+         var radius = 0.167;
+         var segments = 32;
+         var circleGeometry = new THREE.CircleGeometry( radius, segments );
+
+         var circle1 = new THREE.Mesh( circleGeometry, material );
+         scene.add( circle1 );
+         circle1.translateX(-2.45+radius);
+         circle1.translateY(-2.0+radius);
+
+         var circle2 = new THREE.Mesh( circleGeometry, material );
+         scene.add( circle2 );
+         circle2.translateX(-2.45+radius);
+         circle2.translateY(-2.0+4.5-radius);
+
+         var circle3 = new THREE.Mesh( circleGeometry, material );
+         scene.add( circle3 );
+         circle3.translateX(-2.45+4.5-radius);
+         circle3.translateY(-2.0+4.5-radius);
+
+         var circle4 = new THREE.Mesh( circleGeometry, material );
+         scene.add( circle4 );
+         circle4.translateX(-2.45+4.5-radius);
+         circle4.translateY(-2.0+radius);
+
+         // Coins
+         var coin = [0,0,0,0,0,0,0,0,0,0];      // an array 
+         var centre_x= -0.2;
+         var centre_y= 0.3;
+
+         // red coin
+         var color = new THREE.Color("rgb(255, 0, 0)");
+         var geometry = new THREE.CylinderGeometry( 0.116, 0.116,0.067, 30 );
+         var material = new THREE.MeshBasicMaterial( {color} );
+         coin[0] = new THREE.Mesh( geometry, material );
+         scene.add( coin[0] );
+         coin[0].rotation.x = 1.57;
+         coin[0].rotation.y = 1.57;
+         coin[0].position.x =centre_x;
+         coin[0].position.y= centre_y;
+
+         var distance=0.4;
+
+         // white coins
+         var color = new THREE.Color("rgb(255, 255, 255)");
+         var geometry = new THREE.CylinderGeometry( 0.116, 0.116,0.067, 30 );
+         var material = new THREE.MeshBasicMaterial( {color} );
+
+         coin[1] = new THREE.Mesh( geometry, material );
+         scene.add( coin[1] );
+         coin[1].rotation.x = 1.57;
+         coin[1].rotation.y = 1.57;
+         coin[1].position.x =centre_x;
+         coin[1].position.y= centre_y+distance;
+
+         coin[2] = new THREE.Mesh( geometry, material );
+         scene.add( coin[2] );
+         coin[2].rotation.x = 1.57;
+         coin[2].rotation.y = 1.57;
+         coin[2].position.x =centre_x+distance;
+         coin[2].position.y= centre_y;
+
+         coin[3] = new THREE.Mesh( geometry, material );
+         scene.add( coin[3] );
+         coin[3].rotation.x = 1.57;
+         coin[3].rotation.y = 1.57;
+         coin[3].position.x =centre_x;
+         coin[3].position.y= centre_y- distance;
+
+         coin[4] = new THREE.Mesh( geometry, material );
+         scene.add( coin[4] );
+         coin[4].rotation.x = 1.57;
+         coin[4].rotation.y = 1.57;
+         coin[4].position.x =centre_x-distance;
+         coin[4].position.y= centre_y;
+
+         // black coins
+         var color = new THREE.Color("rgb(0, 0, 0)");
+         var geometry = new THREE.CylinderGeometry( 0.116, 0.116,0.067, 30 );
+         var material = new THREE.MeshBasicMaterial( {color} );
+
+         coin[5] = new THREE.Mesh( geometry, material );
+         scene.add( coin[5] );
+         coin[5].rotation.x = 1.57;
+         coin[5].rotation.y = 1.57;
+         coin[5].position.x =centre_x+ distance;
+         coin[5].position.y= centre_y+ distance;
+
+         coin[6] = new THREE.Mesh( geometry, material );
+         scene.add( coin[6] );
+         coin[6].rotation.x = 1.57;
+         coin[6].rotation.y = 1.57;
+         coin[6].position.x =centre_x- distance;
+         coin[6].position.y= centre_y -distance;
+
+         coin[7] = new THREE.Mesh( geometry, material );
+         scene.add( coin[7] );
+         coin[7].rotation.x = 1.57;
+         coin[7].rotation.y = 1.57;
+         coin[7].position.x =centre_x + distance;
+         coin[7].position.y= centre_y - distance;
+
+         coin[8] = new THREE.Mesh( geometry, material );
+         scene.add( coin[8] );
+         coin[8].rotation.x = 1.57;
+         coin[8].rotation.y = 1.57;
+         coin[8].position.x =centre_x- distance;
+         coin[8].position.y= centre_y+ distance;
+
+         // Striker 
+         var color = new THREE.Color("rgb(30, 90, 30)");
+         var geometry = new THREE.CylinderGeometry( 0.134, 0.134,0.067, 30 );
+         var material = new THREE.MeshBasicMaterial( {color} );
+         coin[9] = new THREE.Mesh( geometry, material );
+         scene.add( coin[9] );
+         coin[9].rotation.x = 1.57;
+         coin[9].rotation.y = 1.57;
+         coin[9].position.x =-2;
+         coin[9].position.y= -1;
+
+
+
+         
+         // VARIBLES 
+         camera.position.z = 4;
+         var keyboard = new THREEx.KeyboardState();
+         var  vx = [0,0,0,0,0,0,0,0,0,0];
+         var  vy = [0,0,0,0,0,0,0,0,0,0];
+
+         var lock_striker=0,launch=0;
+         var theta=0,power=0.1;
+         var pos_potted= -2.0;
+         var in_motion=0;
+         var total_stationary=0;
+          var point=100;
+          var start_time= new Date().getTime() / 1000;
+
+         function cam_control()
+         {
+          // TOGGLE VIEWS 
+              if( keyboard.pressed("1") ) 
+                { camera.position.z = 4;
+                   camera.position.x = 0;
+                   camera.position.y = 0;
+                }
+              if( keyboard.pressed("2") ) 
+                 {
+                   camera.position.set( -8, 0, 4 );
+                   camera.up.set( 0, 0, 1 );
+                   camera.lookAt( scene.position );
+                 }
+
+              if( keyboard.pressed("3") ) 
+                 { 
+                   camera.position.set( 0, 0, 0.5 );
+                   camera.up.set( 0, 0, 1 );
+                   camera.lookAt( new THREE.Vector3(-2, -1, 0) );
+                 }
+
+         }
+
+         function handle_inputs()
+         {
+              if( keyboard.pressed("left") && lock_striker==0 ) 
+                 coin[9].position.y+=0.025;
+
+              if( keyboard.pressed("right") && lock_striker==0 ) 
+                 coin[9].position.y-=0.025;
+
+            
+              if( keyboard.pressed("up") ) 
+                {
+                  power+=0.0025;
+                  powerbar.position.y+=0.1;
+                }
+              if( keyboard.pressed("down") && power >0.1 ) 
+                {
+                  power-=0.0025;
+                  powerbar.position.y-=0.1;
+                }
+              // finalise
+              if( keyboard.pressed("space")  ) lock_striker=1;
+
+                        
+             // Set direction
+             if( keyboard.pressed("left") && lock_striker==1 ) 
+                
+                   theta+=0.025;
+                
+              if( keyboard.pressed("right") && lock_striker==1 ) 
+                theta-=0.025;
+
+               if( keyboard.pressed("F") && lock_striker==1 )
+                
+                launch=1;
+          }
+
+         
+// shooter
+         var rectLength = 0.02, rectWidth = 2.5;
+         var rectShape = new THREE.Shape();
+         rectShape.moveTo( 0.0,0.0 );
+         rectShape.lineTo( 0.0, rectWidth );
+         rectShape.lineTo( rectLength, rectWidth );
+         rectShape.lineTo( rectLength, 0.0 );
+         rectShape.lineTo( 0.0, 0.0 );
+         var color = new THREE.Color("rgb(0, 0, 0)");
+         var rectGeom = new THREE.ShapeGeometry( rectShape );
+         var shoot = new THREE.Mesh( rectGeom, new THREE.MeshBasicMaterial( { color } ) ) ;
+         scene.add( shoot );
+         shoot.visible=false;
+
+
+          
+
+
+function render()
+{ 
+          requestAnimationFrame(render);
+          cam_control();
+          handle_inputs();
+
+         var element = document.getElementById("header");
+         element.innerHTML = "POINT : "+point;
+         if( new Date().getTime() / 1000 - start_time>=5)
+         {
+          point-=1;
+          start_time=new Date().getTime() / 1000;
+         }
+
+          if (lock_striker==1 )
+          {  
+            shoot.visible=true;
+            shoot.position.x= coin[9].position.x ;
+            shoot.position.y= coin[9].position.y ;
+            shoot.rotation.z=theta-1.57;
+          }
+
+         if(launch==1)
+         {  
+            shoot.visible=false;
+            audio.play();
+            lock_striker=0;
+            vx[9]=power*Math.cos(theta);
+            vy[9]=power*Math.sin(theta);
+            launch=0;
+            in_motion=1;
+         }
+
+
+
+
+
+
+
+// COLISSION
+function resolveCollision (i1,i2){
+                var r1 = 0.116;
+                var r2 = 0.116;
+                var mass1= 5;
+                var mass2= 5;
+                var d1ux, d1uy;
+                var d2ux, d2uy;
+
+                d1ux=vx[i1];
+                d1uy=vy[i1];
+                d2ux=vx[i2];
+                d2uy=vy[i2];
+
+                if(i1==9)
+                  {r1 = 0.134;mass1=8;}
+                if(i2==9)
+                  {r2= 0.134;mass2=8;}
+
+                console.log("Simulated Collision");
+
+                //vector pointing in direction of collision
+                var cx = coin[i1].position.x - coin[i2].position.x;
+                var cy = coin[i1].position.y - coin[i2].position.y;
+
+                //Distance of the above vector
+                var distance = Math.sqrt(cx*cx + cy*cy);
+
+                //unit vector in direction of collision
+                var unitX;
+                var unitY;
+
+                if(distance == 0.0){
+                  unitX = 1.0;
+                  unitY = 0.0;
+                }
+                else{
+                  unitX = cx/distance;
+                  unitY = cy/distance;
+                }
+
+                //Component of velocity of discs 1,2 in direction of collision
+                var firstInitComp = d1ux * unitX + d1uy * unitY;
+                var secondInitComp = d2ux * unitX + d2uy * unitY;
+
+                var firstFinalComp = (firstInitComp*(mass1 - mass2) + 2*mass2*secondInitComp)/(mass1 + mass2);
+                var secondFinalComp = (secondInitComp*(mass2-mass1) + 2*mass1*firstInitComp)/(mass1 + mass2);
+
+                var firstChange = firstFinalComp - firstInitComp;
+                var secondChange = secondFinalComp - secondInitComp;
+
+                d1ux += firstChange * unitX;
+                d1uy += firstChange * unitY;
+
+                d2ux += secondChange * unitX;
+                d2uy += secondChange * unitY;
+
+                // storing speeds after collision back into original locations
+                
+                  vx[i1] = d1ux;
+                  vy[i1] = d1uy;
+                  vx[i2] =  d2ux;
+                  vy[i2] =  d2uy;
+                
+
+              
+                var magFirstChangeX = (firstChange * unitX) > 0.0 ? (firstChange * unitX) : (-1.0 * firstChange * unitX);
+                var magFirstChangeY = (firstChange * unitY) > 0.0 ? (firstChange * unitY) : (-1.0 * firstChange * unitY);
+              
+                var magSecondChangeX = (secondChange * unitX) > 0.0 ? (secondChange * unitX) : (-1.0 * secondChange * unitX);
+                var magSecondChangeY = (secondChange * unitY) > 0.0 ? (secondChange * unitY) : (-1.0 * secondChange * unitY);
+
+                // coin[i1].position.x += (firstChange * unitX)/magFirstChangeX;
+                // coin[i1].position.y += (firstChange * unitY)/magFirstChangeY;
+                // coin[i2].position.x += (secondChange * unitX)/magSecondChangeX;
+                // coin[i2].position.y += (secondChange * unitY)/magSecondChangeY;
+                 }
+
+// Boundry check FOR ALL
+for (var i = 0; i < 10; i++)  
+     {  
+      
+       var parameter=0.116;
+       if (i==9)
+        parameter=0.134;
+       if(coin[i].position.y<= (-2.0+parameter) || coin[i].position.y>=(2.5-parameter)) 
+       {
+          vy[i]=vy[i]*-1;
+       }
+       if (coin[i].position.x<= (-2.45+parameter) || coin[i].position.x>=(2.05-parameter))
+       {
+        vx[i]=vx[i]*-1;
+       }
+      }
+            
+// Collision func
+function  colliding(key1,  key2 )
+     {   
+         var a=key1,b=key2;
+         var xd = coin[a].position.x - coin[b].position.x;
+         var yd = coin[a].position.y - coin[b].position.y;
+         var distSqr  = (xd * xd) + (yd * yd);
+         var distance = Math.sqrt(distSqr);
+         var sumRadius;
+         if(a ==9  )
+          sumRadius = 0.134+0.116;
+         if(b==9)
+          sumRadius = 0.134+0.116;
+         if(a!=9 && b!=9)
+          sumRadius = 0.116+0.116;
+
+         if (distance <= sumRadius)
+             return 1;
+         return 0;
+
+     }
+
+// Collision check loop    
+for (var i = 0; i < 10; i++)  
+     {  
+       for (var j = i + 1; j < 10; j++)  
+       {  
+         var ret=colliding(i,j);
+           if (ret==1)  
+           {    
+            resolveCollision(i,j);
+           }
+       }
+     }
+          
+// MOve elements
+total_stationary=0;
+for(var i=0;i<10;i++)
+   {  
+    var fric=0.0003;
+
+
+    // Check stationary
+    if (Math.abs(vx[i])<0.001 && Math.abs(vy[i]<0.001) )
+    {
+      vx[i]=0;vy[i]=0;
+      total_stationary+=1;
+    }
+    
+
+    // Check pot
+    var rad=0.2;
+
+    if((coin[i].position.x<= -2.45+rad && coin[i].position.y<=-2.0+rad )|| (coin[i].position.x<=-2.45+rad && coin[i].position.y>=2.5-rad)||(coin[i].position.x>=2.05-rad && coin[i].position.y>=2.5-rad)||(coin[i].position.x>=2.05-rad && coin[i].position.y<=-2.0+rad)) 
+      {coin[i].position.x=-3.45;coin[i].position.y=pos_potted;pos_potted+=0.4;vx[i]=0;vy[i]=0;
+        if(i==1 || i==2 || i==3 || i==4)
+          point+=5;
+        else if (i==5 || i==6 || i==7 || i==8)
+          point-=20;
+      }
+
+    // if() 
+    //   {coin[i].position.x=-3.45;coin[i].position.y=pos_potted;pos_potted+=0.4;vx[i]=0;vy[i]=0;
+    //   if(i==1 || i==2 || i==3 || i==4)
+    //       point+=5;
+    //     else if (i==5 || i==6 || i==7 || i==8)
+    //       point-=20;
+    //   }
+
+    // if()
+    //   {coin[i].position.x=-3.45;coin[i].position.y=pos_potted;pos_potted+=0.4;vx[i]=0;vy[i]=0;
+    //   if(i==1 || i==2 || i==3 || i==4)
+    //       point+=5;
+    //     else if (i==5 || i==6 || i==7 || i==8)
+    //       point-=20;
+    //   }
+
+    // if() 
+    //   {coin[i].position.x=-3.45;coin[i].position.y=pos_potted;pos_potted+=0.4;vx[i]=0;vy[i]=0;
+    //   if(i==1 || i==2 || i==3 || i==4)
+    //       point+=5;
+    //     else if (i==5 || i==6 || i==7 || i==8)
+    //       point-=20;
+    //   }
+
+    if (coin[i].position.x==-3.45)
+      continue;
+
+    // Movement
+     coin[i].position.x+=vx[i];
+     coin[i].position.y+=vy[i];
+
+     // Friction
+
+    if (vx[i]>0)
+         {
+          vx[i]-=fric;
+
+          if (vy[i]>0)
+          vy[i]-=fric;
+          if (vy[i]<0)
+          vy[i]+=fric;
+
+           
+         } 
+    if (vx[i]<0)
+       {   vx[i]+=fric;
+        if (vy[i]>0)
+          vy[i]-=fric;
+          if (vy[i]<0)
+          vy[i]+=fric;
+      }
+   }
+    
+if(in_motion==1 && total_stationary==10)
+         {
+          coin[9].position.x =-2;
+         coin[9].position.y= -1;
+         in_motion=0;
+         }
+
+renderer.render(scene, camera); 
+
+}
+
+render();
+      </script>
+   </body>
+</html>
